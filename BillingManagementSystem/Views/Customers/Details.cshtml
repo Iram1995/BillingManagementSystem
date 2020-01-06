@@ -1,0 +1,58 @@
+﻿@model BillingManagementSystem.Models.Customer
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Customer</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.first_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.first_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.last_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.last_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cell_Number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cell_Number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.createdDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.createdDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.cust_Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
