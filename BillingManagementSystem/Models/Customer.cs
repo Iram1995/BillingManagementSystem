@@ -20,10 +20,16 @@ namespace BillingManagementSystem.Models
         [Required]
         [Display(Name = "Cell Number")]
         public string cell_Number { get; set; }
-        [Required]
+       
         [Display(Name = "Address")]
         public string address { get; set; }
-       
+
+        [Display(Name = "Card Number")]
+        public string cardNumber { get; set; }
+        [Display(Name = "CNIC")]
+        public string cnic { get; set; }
+
         public DateTime createdDate { get; set; }
+        public ICollection<Payment> payments { get; set; }
     }
 }

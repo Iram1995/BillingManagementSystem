@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Customers list</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,11 +12,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.first_Name)
+            @Html.DisplayName("Customer Name")
+
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.last_Name)
-        </th>
+       
         <th>
             @Html.DisplayNameFor(model => model.cell_Number)
         </th>
@@ -24,34 +23,47 @@
             @Html.DisplayNameFor(model => model.address)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.cnic)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cardNumber)
+        </th>
+        <th>
+
             @Html.DisplayNameFor(model => model.createdDate)
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.first_Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.last_Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.cell_Number)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.address)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.createdDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.cust_Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.cust_Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.cust_Id })
-        </td>
-    </tr>
+<tr>
+    <td>
+        <a href="~/Customers/Details/@item.cust_Id">@item.first_Name @item.last_Name</a>
+    </td>
+   
+    <td>
+        @Html.DisplayFor(modelItem => item.cell_Number)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.address)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.cnic)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.cardNumber)
+    </td>
+    <td>
+        @item.createdDate.ToString("dd-MM-yyyy")
+        @*@Html.DisplayFor(modelItem => item.createdDate)*@
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.cust_Id }) |
+        @Html.ActionLink("Details", "Details", new { id = item.cust_Id }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.cust_Id }) |
+        @Html.ActionLink("Add Payment", "Create", "Payments", new { id = item.cust_Id },null)
+    </td>
+</tr>
 }
 
 </table>

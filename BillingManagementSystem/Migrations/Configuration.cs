@@ -9,6 +9,7 @@ namespace BillingManagementSystem.Migrations
     {
         public Configuration()
         {
+            AutomaticMigrationDataLossAllowed = true;
             AutomaticMigrationsEnabled = false;
             ContextKey = "BillingManagementSystem.Models.ApplicationDbContext";
         }

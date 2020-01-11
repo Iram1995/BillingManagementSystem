@@ -1,0 +1,119 @@
+﻿@model BillingManagementSystem.Models.Payment
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>Payment</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.paid_By, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.paid_By, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.paid_By, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.payment_Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.payment_Amount, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.payment_Amount, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.payment_For, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.payment_For, new { htmlAttributes = new { @class = "form-control", type = "month" } })
+            @Html.ValidationMessageFor(model => model.payment_For, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.employee_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.employee_Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.employee_Name, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.payment_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @* @Html.EditorFor(model => model.payment_Date, new { htmlAttributes = new { @class = "form-control", @Value = DateTime.Now, @readonly = "readonly" } })*@
+            <input value=@DateTime.Now.ToString("dd-MM-yyyy") class="form-control text-box single-line valid" data-val="true" data-val-date="The field Payment Date must be a date." data-val-required="The Payment Date field is required." id="payment_Date" name="payment_Date" readonly="readonly" type="datetime" aria-describedby="payment_Date-error" aria-invalid="false">
+            @Html.ValidationMessageFor(model => model.payment_Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @if (Model.cust_Id != 0)
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.cust_Id, "Customer Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control valid" id="cust_Id" name="cust_Id" aria-invalid="false" disabled required>
+                    <option value="">Select Customer</option>
+                    @foreach (var item in ViewBag.customers)
+                    {
+                        if (Model.cust_Id == @item.cust_Id)
+                        {
+                            <option selected value="@item.cust_Id">@item.first_Name @item.last_Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.cust_Id">@item.first_Name @item.last_Name</option>
+                        }
+                    }
+                    @Html.ValidationMessageFor(model => model.cust_Id, "", new { @class = "text-danger" })
+
+                </select>
+            </div>
+        </div>}
+    else
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.cust_Id, "Customer Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control valid" id="cust_Id" name="cust_Id" aria-invalid="false" required>
+                    <option value="">Select Customer</option>
+                    @foreach (var item in ViewBag.customers)
+                    {
+                <option value="@item.cust_Id">@item.first_Name @item.last_Name</option>
+                    }
+                    @Html.ValidationMessageFor(model => model.cust_Id, "", new { @class = "text-danger" })
+
+                </select>
+            </div>
+            
+            @*<div class="col-md-10">
+                @Html.DropDownList("cust_Id", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.cust_Id, "", new { @class = "text-danger" })
+            </div>*@
+        </div>
+        }
+    @Html.HiddenFor(m => m.employee_Name, new { @Value = User.Identity.Name })
+    @Html.HiddenFor(m => m.cust_Id)
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

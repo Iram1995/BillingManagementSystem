@@ -1,0 +1,100 @@
+﻿@model BillingManagementSystem.Models.Payment
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Payment</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.payment_Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.paid_By, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.paid_By, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.paid_By, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.payment_Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.payment_Amount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.payment_Amount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.payment_For, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.payment_For,"{yyyy-MM}", new { htmlAttributes = new { @class = "form-control", @type = "month" } })*@
+
+                <input class="form-control text-box single-line" data-val="true" data-val-date="The field Payment For must be a date." data-val-required="The Payment For field is required." id="payment_For" name="payment_For" type="month" value=@Model.payment_For.ToString("yyyy-MM") required>
+                @Html.ValidationMessageFor(model => model.payment_For, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.employee_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.employee_Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.employee_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.payment_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.payment_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.payment_Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.cust_Id, "Customer Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control valid" id="cust_Id" name="cust_Id" aria-invalid="false" required>
+                    <option value="">Select Customer</option>
+                    @foreach (var item in ViewBag.customers)
+                    {
+                        if (Model.cust_Id == @item.cust_Id)
+                        {
+                            <option selected value="@item.cust_Id">@item.first_Name @item.last_Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.cust_Id">@item.first_Name @item.last_Name</option>
+                        }
+                    }
+                    @Html.ValidationMessageFor(model => model.cust_Id, "", new { @class = "text-danger" })
+
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.employee_Name, new { @Value = User.Identity.Name })
+    @Html.HiddenFor(m => m.cust_Id)
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

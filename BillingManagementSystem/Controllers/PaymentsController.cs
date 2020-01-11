@@ -11,110 +11,125 @@ using BillingManagementSystem.Models;
 namespace BillingManagementSystem.Controllers
 {
     [Authorize]
-    public class CustomersController : Controller
+    public class PaymentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Customers
+        // GET: Payments
         public ActionResult Index()
         {
-            return View(db.Customers.ToList());
+            var payments = db.Payments.Include(p => p.Customer);
+            return View(payments.ToList());
         }
 
-        // GET: Customers/Details/5
+        // GET: Payments/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customers.Find(id);
-            if (customer == null)
+            Payment payment = db.Payments.Find(id);
+            if (payment == null)
             {
                 return HttpNotFound();
             }
-            customer.payments = db.Payments.Where(m => m.cust_Id == id).ToList();
-            return View(customer);
+            return View(payment);
         }
 
-        // GET: Customers/Create
-        public ActionResult Create()
+        // GET: Payments/Create
+        public ActionResult Create (int id=0)
         {
-            return View();
+            ViewBag.customers = db.Customers.ToList();
+            //ViewBag.cust_Id = new SelectList(db.Customers, "cust_Id", "first_Name");
+            Payment payment = new Payment();
+          
+            if (id != 0) {
+                payment.Customer = db.Customers.Find(id);
+                payment.cust_Id=db.Customers.Find(id).cust_Id;
+            }
+          
+            return View(payment);
         }
+      
+        
 
-        // POST: Customers/Create
+        // POST: Payments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "cust_Id,first_Name,last_Name,cell_Number,address,createdDate,cnic,cardNumber")] Customer customer)
+        public ActionResult Create([Bind(Include = "payment_Id,paid_By,payment_Amount,payment_For,employee_Name,payment_Date,cust_Id")] Payment payment)
         {
             if (ModelState.IsValid)
             {
-                customer.createdDate = DateTime.Now;
-                db.Customers.Add(customer);
+
+                payment.Customer = db.Customers.Find(payment.cust_Id);
+                db.Payments.Add(payment);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(customer);
+            ViewBag.cust_Id = new SelectList(db.Customers, "cust_Id", "first_Name", payment.cust_Id);
+            return View(payment);
         }
 
-        // GET: Customers/Edit/5
+        // GET: Payments/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customers.Find(id);
-            if (customer == null)
+            Payment payment = db.Payments.Find(id);
+            if (payment == null)
             {
                 return HttpNotFound();
             }
-            return View(customer);
+            //ViewBag.cust_Id = new SelectList(db.Customers, "cust_Id", "first_Name", payment.cust_Id);
+            ViewBag.customers = db.Customers.ToList();
+            return View(payment);
         }
 
-        // POST: Customers/Edit/5
+        // POST: Payments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "cust_Id,first_Name,last_Name,cell_Number,address,createdDate,cnic,cardNumber")] Customer customer)
+        public ActionResult Edit([Bind(Include = "payment_Id,paid_By,payment_Amount,payment_For,employee_Name,payment_Date,cust_Id")] Payment payment)
         {
             if (ModelState.IsValid)
             {
-                customer.createdDate = DateTime.Now;
-                db.Entry(customer).State = EntityState.Modified;
+                db.Entry(payment).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(customer);
+            ViewBag.cust_Id = new SelectList(db.Customers, "cust_Id", "first_Name", payment.cust_Id);
+            return View(payment);
         }
 
-        // GET: Customers/Delete/5
+        // GET: Payments/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customers.Find(id);
-            if (customer == null)
+            Payment payment = db.Payments.Find(id);
+            if (payment == null)
             {
                 return HttpNotFound();
             }
-            return View(customer);
+            return View(payment);
         }
 
-        // POST: Customers/Delete/5
+        // POST: Payments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Customer customer = db.Customers.Find(id);
-            db.Customers.Remove(customer);
+            Payment payment = db.Payments.Find(id);
+            db.Payments.Remove(payment);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

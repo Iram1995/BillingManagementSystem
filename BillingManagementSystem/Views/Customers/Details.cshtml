@@ -3,7 +3,12 @@
 @{
     ViewBag.Title = "Details";
 }
-
+<style>
+    th, td {
+        padding: 1%;
+        width: 20%;
+    }
+</style>
 <h2>Details</h2>
 
 <div>
@@ -41,14 +46,83 @@
         <dd>
             @Html.DisplayFor(model => model.address)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.cnic)
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.cnic)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.cardNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cardNumber)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.createdDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.createdDate)
+            @Model.createdDate.ToString("dd-MM-yyyy")
+
+            @*@Html.DisplayFor(model => model.createdDate.ToString("dd-MM-yyyy"))*@
         </dd>
+        <dt>
+            @Html.DisplayName("Total amount paid")
+        </dt>
+        @if (Model.payments.Count() > 0)
+        {
+            <dd>
+                @Model.payments.Where(m => m.payment_For.Year == System.DateTime.Now.Year).Sum(m => m.payment_Amount)
+                @*@Html.DisplayFor(model => model.createdDate.ToString("dd-MM-yyyy"))*@
+            </dd>
+        }
+        else{
+        <dd>0</dd>
+        }
+
+
+
+    </dl>
+    
+    <h4>Payment Details</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        @if (Model.payments.Count() > 0)
+        {
+        <table>
+            <tr>
+                <th>Payment for</th>
+                <th>Payment Amount</th>
+                <th>Paid by</th>
+                <th>Payment Date</th>
+                <th>Employee</th>
+            </tr>
+
+            @foreach (var item in Model.payments.OrderByDescending(m=>m.payment_For))
+            {
+
+        <tr>
+            <td>@item.payment_For.ToString("MMMM-yyyy")</td>
+            <td>@item.payment_Amount</td>
+            <td>@item.paid_By</td>
+            <td>@item.payment_Date.ToString("dd-MM-yyyy")</td>
+            <td>@item.employee_Name</td>
+
+        </tr>
+                    }
+               
+            </table>
+
+        }
+        else
+        {
+            <p>No payment for this customer</p>
+        }
+
+
 
     </dl>
 </div>
