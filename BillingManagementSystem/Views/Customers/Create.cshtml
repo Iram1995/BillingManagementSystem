@@ -60,6 +60,13 @@
             @Html.ValidationMessageFor(model => model.cardNumber, "", new { @class = "text-danger" })
         </div>
     </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.boxNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.boxNumber, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.boxNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
     @*<div class="form-group">
             @Html.LabelFor(model => model.createdDate, htmlAttributes: new { @class = "control-label col-md-2" })

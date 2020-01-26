@@ -48,7 +48,7 @@ namespace BillingManagementSystem.Controllers
                 payment.Customer = db.Customers.Find(id);
                 payment.cust_Id=db.Customers.Find(id).cust_Id;
             }
-          
+            payment.payment_Date = DateTime.Now;
             return View(payment);
         }
       
@@ -65,6 +65,7 @@ namespace BillingManagementSystem.Controllers
             {
 
                 payment.Customer = db.Customers.Find(payment.cust_Id);
+                payment.payment_Date = DateTime.Now;
                 db.Payments.Add(payment);
                 db.SaveChanges();
                 return RedirectToAction("Index");

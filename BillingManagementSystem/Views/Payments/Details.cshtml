@@ -6,6 +6,7 @@
 
 <h2>Details</h2>
 
+
 <div>
     <h4>Payment</h4>
     <hr />
@@ -40,29 +41,28 @@
 
         <dd>
             @Model.payment_For.ToString("MMMM-yyyy")
-            @*@Html.DisplayFor(model => model.payment_For)*@
-        </dd>
+            @*Html.DisplayFor(model => model.payment_For)*@
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.employee_Name)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.employee_Name)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.employee_Name)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.employee_Name)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.payment_Date)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.payment_Date)
+            </dt>
 
-        <dd>
-            @Model.payment_Date.ToString("dd-MM-yyyy")
-            @*@Html.DisplayFor(model => model.payment_Date)*@
-        </dd>
+            <dd>
+                @Model.payment_Date.ToString("dd-MM-yyyy")
+            </dd>
 
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.payment_Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+            </dl>
+            </div>
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.payment_Id }) |
+                @Html.ActionLink("Back to List", "Index")
+            </p>

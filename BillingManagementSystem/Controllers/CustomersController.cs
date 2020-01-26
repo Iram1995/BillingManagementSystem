@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BillingManagementSystem.Models;
+using BillingManagementSystem.ViewModel;
 
 namespace BillingManagementSystem.Controllers
 {
@@ -34,7 +36,29 @@ namespace BillingManagementSystem.Controllers
                 return HttpNotFound();
             }
             customer.payments = db.Payments.Where(m => m.cust_Id == id).ToList();
-            return View(customer);
+            var allMonths=GetMonthNamesByCulture();
+            var paidMonths=customer.payments.Where(c=>c.payment_For.Year==DateTime.Now.Year).Select(m => m.payment_For.Month).ToList();
+            var paidMonthsName = GetMonthNames(paidMonths);
+            var unPaidMonths = allMonths.Where(c=>!paidMonthsName.Any(m => m==c)).ToList();
+            CustomerDetailViewModel viewModel = new CustomerDetailViewModel();
+            viewModel.customer = customer;
+           
+            viewModel.customer.payments = customer.payments.Where(c => c.payment_For.Year == DateTime.Now.Year).ToList();
+
+
+            var monthscheckBoxListItems = new List<CheckBoxListItem>();
+            foreach (var item in allMonths)
+            {
+                monthscheckBoxListItems.Add(new CheckBoxListItem()
+                {
+                    ID = item.IndexOf(item),
+                    Display = item,
+                    IsChecked = paidMonthsName.Where(m=>m==item).Count()>0?true:false,
+                });
+            }
+
+            viewModel.months = monthscheckBoxListItems;
+            return View(viewModel);
         }
 
         // GET: Customers/Create
@@ -48,7 +72,7 @@ namespace BillingManagementSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "cust_Id,first_Name,last_Name,cell_Number,address,createdDate,cnic,cardNumber")] Customer customer)
+        public ActionResult Create([Bind(Include = "cust_Id,first_Name,last_Name,cell_Number,address,createdDate,cnic,cardNumber,boxNumber")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -81,7 +105,7 @@ namespace BillingManagementSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "cust_Id,first_Name,last_Name,cell_Number,address,createdDate,cnic,cardNumber")] Customer customer)
+        public ActionResult Edit([Bind(Include = "cust_Id,first_Name,last_Name,cell_Number,address,createdDate,cnic,cardNumber,boxNumber")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -127,5 +151,38 @@ namespace BillingManagementSystem.Controllers
             }
             base.Dispose(disposing);
         }
-    }
-}
+        public List<string> GetMonthNamesByCulture()
+        {
+            CultureInfo culture= CultureInfo.InvariantCulture;
+            return new List<string>
+    {
+        culture.DateTimeFormat.GetMonthName(1),
+        culture.DateTimeFormat.GetMonthName(2),
+        culture.DateTimeFormat.GetMonthName(3),
+        culture.DateTimeFormat.GetMonthName(4),
+        culture.DateTimeFormat.GetMonthName(5),
+        culture.DateTimeFormat.GetMonthName(6),
+        culture.DateTimeFormat.GetMonthName(7),
+        culture.DateTimeFormat.GetMonthName(8),
+        culture.DateTimeFormat.GetMonthName(9),
+        culture.DateTimeFormat.GetMonthName(10),
+        culture.DateTimeFormat.GetMonthName(11),
+        culture.DateTimeFormat.GetMonthName(12),
+    };
+        }
+  
+    public List<string> GetMonthNames(List<int> months)
+    {
+        CultureInfo culture = CultureInfo.InvariantCulture;
+
+
+        List<string> monthNames = new List<string>();
+        foreach (var item in months)
+        {
+
+            monthNames.Add(culture.DateTimeFormat.GetMonthName(item));
+        };
+
+        return monthNames;
+    }  
+}}

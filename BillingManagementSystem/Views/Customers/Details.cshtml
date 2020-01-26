@@ -1,8 +1,9 @@
-﻿@model BillingManagementSystem.Models.Customer
+﻿@model BillingManagementSystem.ViewModel.CustomerDetailViewModel
 
 @{
     ViewBag.Title = "Details";
 }
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <style>
     th, td {
         padding: 1%;
@@ -16,104 +17,112 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.first_Name)
+            @Html.DisplayNameFor(model => model.customer.first_Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.first_Name)
+            @Html.DisplayFor(model => model.customer.first_Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.last_Name)
+            @Html.DisplayNameFor(model => model.customer.last_Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.last_Name)
+            @Html.DisplayFor(model => model.customer.last_Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.cell_Number)
+            @Html.DisplayNameFor(model => model.customer.cell_Number)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.cell_Number)
+            @Html.DisplayFor(model => model.customer.cell_Number)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.address)
+            @Html.DisplayNameFor(model => model.customer.address)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.address)
+            @Html.DisplayFor(model => model.customer.address)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.cnic)
+            @Html.DisplayNameFor(model => model.customer.cnic)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.cnic)
+            @Html.DisplayFor(model => model.customer.cnic)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.cardNumber)
+            @Html.DisplayNameFor(model => model.customer.cardNumber)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.cardNumber)
+            @Html.DisplayFor(model => model.customer.cardNumber)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.createdDate)
+            @Html.DisplayNameFor(model => model.customer.boxNumber)
         </dt>
 
         <dd>
-            @Model.createdDate.ToString("dd-MM-yyyy")
+            @Html.DisplayFor(model => model.customer.boxNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.customer.createdDate)
+        </dt>
+
+        <dd>
+            @Model.customer.createdDate.ToString("dd-MM-yyyy")
 
             @*@Html.DisplayFor(model => model.createdDate.ToString("dd-MM-yyyy"))*@
         </dd>
         <dt>
             @Html.DisplayName("Total amount paid")
         </dt>
-        @if (Model.payments.Count() > 0)
+        @if (Model.customer.payments.Count() > 0)
         {
             <dd>
-                @Model.payments.Where(m => m.payment_For.Year == System.DateTime.Now.Year).Sum(m => m.payment_Amount)
+                @Model.customer.payments.Where(m => m.payment_For.Year == System.DateTime.Now.Year).Sum(m => m.payment_Amount)
                 @*@Html.DisplayFor(model => model.createdDate.ToString("dd-MM-yyyy"))*@
             </dd>
         }
-        else{
-        <dd>0</dd>
+        else
+        {
+            <dd>0</dd>
         }
 
 
 
     </dl>
-    
+
     <h4>Payment Details</h4>
     <hr />
     <dl class="dl-horizontal">
-        @if (Model.payments.Count() > 0)
+        @if (Model.customer.payments.Count() > 0)
         {
-        <table>
-            <tr>
-                <th>Payment for</th>
-                <th>Payment Amount</th>
-                <th>Paid by</th>
-                <th>Payment Date</th>
-                <th>Employee</th>
-            </tr>
+            <table>
+                <tr>
+                    <th>Payment for</th>
+                    <th>Payment Amount</th>
+                    <th>Paid by</th>
+                    <th>Payment Date</th>
+                    <th>Employee</th>
+                </tr>
 
-            @foreach (var item in Model.payments.OrderByDescending(m=>m.payment_For))
-            {
+                @foreach (var item in Model.customer.payments.OrderByDescending(m => m.payment_For))
+                {
 
-        <tr>
-            <td>@item.payment_For.ToString("MMMM-yyyy")</td>
-            <td>@item.payment_Amount</td>
-            <td>@item.paid_By</td>
-            <td>@item.payment_Date.ToString("dd-MM-yyyy")</td>
-            <td>@item.employee_Name</td>
+                    <tr>
+                        <td>@item.payment_For.ToString("MMMM-yyyy")</td>
+                        <td>@item.payment_Amount</td>
+                        <td>@item.paid_By</td>
+                        <td>@item.payment_Date.ToString("dd-MM-yyyy")</td>
+                        <td>@item.employee_Name</td>
 
-        </tr>
-                    }
-               
+                    </tr>
+                }
+
             </table>
 
         }
@@ -121,12 +130,20 @@
         {
             <p>No payment for this customer</p>
         }
-
-
-
     </dl>
-</div>
+
+        </div>
+        <h4>Installments paid this year (@DateTime.Now.Year)</h4>
+        <hr />
+        @Html.EditorFor(model => model.months)
+
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.cust_Id }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.customer.cust_Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+<script>
+
+    $("input[type='checkbox']")
+        .attr('disabled', true)
+</script>

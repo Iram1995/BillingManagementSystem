@@ -26,6 +26,8 @@ namespace BillingManagementSystem.Models
 
         [Display(Name = "Card Number")]
         public string cardNumber { get; set; }
+        [Display(Name = "Box Number")]
+        public string boxNumber { get; set; }
         [Display(Name = "CNIC")]
         public string cnic { get; set; }
 
